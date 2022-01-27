@@ -1,0 +1,25 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: countdown2
+spec:
+  template:
+    metadata:
+      name: countdown2
+    spec:
+      containers:
+        - name: counter1
+          image: centos:7
+          command:
+            - "bin/bash"
+            - "-c"
+            - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
+        - name: counter2
+          image: centos:7
+          command:
+            - "bin/bash"
+            - "-c"
+            - "for i in 19 18 17 16 15 14 13 12 11 ; do echo $i ; done"
+      restartPolicy: Never
+  backoffLimit: 4

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  creationTimestamp: "2021-12-15T18:57:25Z"
+  generation: 1
+  name: nginx
+  namespace: my-ingress-app
+  resourceVersion: "1152"
+  uid: cff3e419-4b65-4c76-9068-811e8a1b8d7a
+spec:
+  ingressClassName: default
+  rules:
+  - host: dev.satya.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}

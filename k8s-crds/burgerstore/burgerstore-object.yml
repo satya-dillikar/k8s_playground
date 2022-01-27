@@ -1,0 +1,9 @@
+apiVersion: tutorialworks.com/v1
+kind: BurgerStore
+metadata:
+  name: burgerstoreobject
+spec:
+  owner: "Satya Dillikar"
+  address : "Palo Alto, CA"
+  currency: "Dollar"
+  replicas: 1

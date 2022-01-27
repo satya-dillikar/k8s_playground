@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+  namespace: nginx-sample-traffic
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: a5ff9bc794c9c412798924a990b33791-7c4fb9dc4b1b492e.elb.us-west-2.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: apple-service
+            port:
+              number: 5678
+        path: /apple
+        pathType: Prefix
+      - backend:
+          service:
+            name: banana-service
+            port:
+              number: 5678
+        path: /banana
+        pathType: Prefix

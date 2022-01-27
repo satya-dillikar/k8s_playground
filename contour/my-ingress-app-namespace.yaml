@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: "2021-12-15T18:56:19Z"
+  labels:
+    kubernetes.io/metadata.name: my-ingress-app
+  name: my-ingress-app
+  resourceVersion: "972"
+  uid: ade78208-47c0-4c80-a9f0-3e948dca614b
+spec:
+  finalizers:
+  - kubernetes
+status:
+  phase: Active

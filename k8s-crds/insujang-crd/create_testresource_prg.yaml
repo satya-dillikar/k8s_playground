@@ -1,0 +1,7 @@
+apiVersion: insujang.github.io/v1beta1
+kind: TestResource
+metadata:
+  name: example-resource
+spec:
+  command: "echo Hello Kubernetes CRD!"
+  customProperty: "thisshouldmatchwiththisstring"

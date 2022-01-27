@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kuard
+  labels:
+    app: kuard
+spec:
+  ingressClassName: contour
+  defaultBackend:
+    service:
+      name: kuard
+      port:
+        number: 80

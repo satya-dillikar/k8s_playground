@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yages-nginx-grpc-ingress
+  namespace: grpc-demo
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: GRPC
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: a5ff9bc794c9c412798924a990b33791-7c4fb9dc4b1b492e.elb.us-west-2.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: yages
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

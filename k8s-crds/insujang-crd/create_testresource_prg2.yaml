@@ -1,0 +1,7 @@
+apiVersion: insujang.github.io/v1beta1
+kind: TestResource
+metadata:
+  name: example-resource-prg2
+spec:
+  command: "echo Hello Kubernetes CRD!"
+  customProperty: "thisisanotherpropertythatshouldnotbeaccepted"

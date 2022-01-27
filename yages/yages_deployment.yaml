@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: yages
+  name: yages
+  namespace: grpc-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yages
+  template:
+    metadata:
+      labels:
+        app: yages
+    spec:
+      containers:
+      - name: grpcsrv
+        image: docker.io/dsatya6/yages:0.1.0
+        ports:
+        - containerPort: 9000
+          protocol: TCP

@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yages-contour-ingress
+  namespace: grpc-demo
+  labels:
+    app: yages
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-lb-contour-production
+    kubernetes.io/tls-acme: "false"
+    ingress.kubernetes.io/force-ssl-redirect: "false"
+    kubernetes.io/ingress.class: contour-production
+spec:
+#  ingressClassName: contour
+  rules:
+  - host: a15a88a642fa4443b906cdc87fe3b475-577909340.us-west-2.elb.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: yages
+            port:
+              number: 9000
+        path: /
+        pathType: Prefix
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: yages-httpproxy
+  namespace: grpc-demo
+  annotations:
+    projectcontour.io/ingress.class: contour-production
+spec:
+  virtualhost:
+    fqdn: a15a88a642fa4443b906cdc87fe3b475-577909340.us-west-2.elb.amazonaws.com
+    tls:
+      passthrough: true
+  tcpproxy:
+    services:
+    - name: yages
+      port: 9000

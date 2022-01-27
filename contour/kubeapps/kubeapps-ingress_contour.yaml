@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubeapps-contour-ingress
+  namespace: kubeapps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    projectcontour.io/response-timeout: "1m"
+    projectcontour.io/per-try-timeout: "600s"
+    projectcontour.io/retry-on: "5xx"
+    projectcontour.io/num-retries: "3"
+spec:
+  ingressClassName: contour
+  rules:
+  - host: a06589614a2b743688ef6b8cdbfc6912-751344421.us-west-2.elb.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: kubeapps
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+

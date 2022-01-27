@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-loadbalancer
+  namespace: kubeapps
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/instance: kubeapps
+    app.kubernetes.io/name: kubeapps
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http

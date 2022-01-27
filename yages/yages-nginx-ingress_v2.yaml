@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yages-nginx-ingress
+  namespace: grpc-demo
+  labels:
+    app: yages
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ae326cef8990b42edb85deb1c0d6048e-62b483cc6a1a3617.elb.us-west-2.amazonaws.com
+  defaultBackend:
+    service:
+      name: yages
+      port:
+        number: 9000

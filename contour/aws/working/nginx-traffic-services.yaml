@@ -1,0 +1,26 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: banana-service
+  namespace: nginx-sample-traffic
+  annotations:
+    projectcontour.io/upstream-protocol.h2c: "5678"
+spec:
+  selector:
+    app: banana
+  ports:
+    - port: 5678 # Default port for image
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: apple-service
+  namespace: nginx-sample-traffic
+  annotations:
+    projectcontour.io/upstream-protocol.h2c: "5678"
+spec:
+  selector:
+    app: apple
+  ports:
+    - port: 5678 # Default port for image
+

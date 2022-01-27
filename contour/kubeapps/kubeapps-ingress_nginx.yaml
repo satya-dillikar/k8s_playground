@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubeapps-nginx-ingress
+  namespace: kubeapps
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: a5ff9bc794c9c412798924a990b33791-7c4fb9dc4b1b492e.elb.us-west-2.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: kubeapps
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

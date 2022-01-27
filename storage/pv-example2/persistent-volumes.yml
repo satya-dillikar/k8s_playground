@@ -1,0 +1,26 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: research-vol
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/research-vol"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: research-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  volumeName: research-vol
+  resources:
+    requests:
+      storage: 1Gi

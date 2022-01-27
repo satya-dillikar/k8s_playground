@@ -1,0 +1,49 @@
+---
+# yq eval cheatsheet.yaml -j
+#
+
+# Array, collection, List
+key1:
+  - value1
+  - value2
+  - value3
+  - value4
+  - value5
+
+key2: [value1, value2, value3, value4, value5]
+
+key3: [value1, value2,
+       value3, value4, value5]
+
+# Arrays of Arrays
+emloyees:
+  -
+    id: 213
+    name: franc
+    others:
+      - {department: sales, id: 1}
+      - {salary: 5000}
+      - {address: USA, pincode: 97845}
+one:
+  - id: 1
+    name: franc
+  - id: 11
+    name: Tom
+  - id: 12
+    name: Satya
+    job: engineer
+
+numbers_str: [
+  one,
+  two,
+  three,
+  four
+]
+
+numbers: [
+  1,
+  2,
+  3,
+  4
+]
+...

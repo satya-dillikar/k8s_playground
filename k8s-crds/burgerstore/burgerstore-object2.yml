@@ -1,0 +1,9 @@
+apiVersion: tutorialworks.com/v1
+kind: BurgerStore
+metadata:
+  name: object2
+spec:
+  owner: "ABB ZZY"
+  address : "Palo Alto, CA"
+  currency: "Dollar"
+  replicas: 1

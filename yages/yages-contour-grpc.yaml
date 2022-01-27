@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yages-contour-grpc
+  namespace: grpc-demo
+  annotations:
+    kubernetes.io/ingress.class: contour-internal
+spec:
+  rules:
+  - host: a15a88a642fa4443b906cdc87fe3b475-577909340.us-west-2.elb.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: yages
+            port:
+              number: 9000
+        path: /
+        pathType: Prefix

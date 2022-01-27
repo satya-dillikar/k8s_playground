@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+   labels:
+     app: research
+   name: research
+spec:
+   replicas: 2
+   selector:
+     matchLabels:
+       app: research
+   template:
+     metadata:
+       labels:
+         app: research
+     spec:
+       containers:
+       - image: research:v2
+         env:
+         - name: VOLUME
+           value: "/var/log/heartbeat"
+         name: research
+         volumeMounts:
+         - mountPath: "/var/log/heartbeat"
+           name: research-vol
+       volumes:
+       - name: research-vol
+         persistentVolumeClaim: 
+           claimName: research-pvc
+       restartPolicy: Always

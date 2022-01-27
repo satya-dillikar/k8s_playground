@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx-sample-traffic
+  labels:
+    name: nginx-sample-traffic
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: banana-app
+  namespace: nginx-sample-traffic
+  labels:
+    app: banana
+spec:
+  containers:
+    - name: banana-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=banana"
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: banana-service
+  namespace: nginx-sample-traffic
+  annotations:
+    projectcontour.io/upstream-protocol.h2c: "5678"
+spec:
+  selector:
+    app: banana
+  ports:
+    - port: 5678 # Default port for image
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: apple-app
+  namespace: nginx-sample-traffic
+  labels:
+    app: apple
+spec:
+  containers:
+    - name: apple-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=apple"
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: apple-service
+  namespace: nginx-sample-traffic
+  annotations:
+    projectcontour.io/upstream-protocol.h2c: "5678"
+spec:
+  selector:
+    app: apple
+  ports:
+    - port: 5678 # Default port for image
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-nginx-demo
+  namespace: nginx-sample-traffic
+spec:
+  rules:
+  - host: a5ff9bc794c9c412798924a990b33791-7c4fb9dc4b1b492e.elb.us-west-2.amazonaws.com
+    http:
+      paths:
+        - path: /apple
+          backend:
+            serviceName: apple-service
+            servicePort: 5678
+        - path: /banana
+          backend:
+            serviceName: banana-service
+            servicePort: 5678
+

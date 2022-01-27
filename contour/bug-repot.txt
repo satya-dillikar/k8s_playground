@@ -1,0 +1,86 @@
+WORKING INGRESS
+
+
+kubectl get ingress kubeapps -n kubeapps -o yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"letsencrypt","nginx.ingress.kubernetes.io/client-body-buffer-size":"8m","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffers":"8","nginx.ingress.kubernetes.io/proxy-read-timeout":"600s","nginx.ingress.kubernetes.io/rewrite-target":"/"},"name":"kubeapps","namespace":"kubeapps"},"spec":{"defaultBackend":{"service":{"name":"kubeapps","port":{"number":80}}},"ingressClassName":"contour"}}
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 8m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+    nginx.ingress.kubernetes.io/proxy-buffers: "8"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: 600s
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  creationTimestamp: "2021-12-16T00:00:52Z"
+  generation: 1
+  name: kubeapps
+  namespace: kubeapps
+  resourceVersion: "8865"
+  uid: 2f14e5f7-bfcf-4c0f-80c2-ef3e0b251b6d
+spec:
+  defaultBackend:
+    service:
+      name: kubeapps
+      port:
+        number: 80
+  ingressClassName: contour
+status:
+  loadBalancer:
+    ingress:
+    - hostname: ad4a55f43bd3e4337897b301e927f73a-56787847.us-west-2.elb.amazonaws.com
+
+
+
+FAILED INGRESS
+kubectl get ingress -n kubeapps -o yaml
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"letsencrypt","nginx.ingress.kubernetes.io/client-body-buffer-size":"8m","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffers":"8","nginx.ingress.kubernetes.io/proxy-read-timeout":"600s","nginx.ingress.kubernetes.io/rewrite-target":"/"},"name":"kubeapps","namespace":"kubeapps"},"spec":{"ingressClassName":"contour","rules":[{"host":"dev.satya.com","http":{"paths":[{"backend":{"service":{"name":"kubeapps","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      nginx.ingress.kubernetes.io/client-body-buffer-size: 8m
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      nginx.ingress.kubernetes.io/proxy-buffers: "8"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: 600s
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    creationTimestamp: "2021-12-16T00:15:30Z"
+    generation: 1
+    name: kubeapps
+    namespace: kubeapps
+    resourceVersion: "11333"
+    uid: 623387e9-0884-4362-94ab-294b22c2f907
+  spec:
+    ingressClassName: contour
+    rules:
+    - host: dev.satya.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: kubeapps
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer:
+      ingress:
+      - hostname: ad4a55f43bd3e4337897b301e927f73a-56787847.us-west-2.elb.amazonaws.com
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+
+
+  ---
+  AWS KUBEAPPs Token
+  kubectl get secret -n default $(kubectl get serviceaccount kubeapps-operator -n default -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' && echo
+
+  eyJhbGciOiJSUzI1NiIsImtpZCI6IkdvQnJ6X0MxMkx6dVc3VUpNS1ZaLTM2aHVkSi1KT21DZEN2MW1QYzU1TXcifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Imt1YmVhcHBzLW9wZXJhdG9yLXRva2VuLW50anA4Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Imt1YmVhcHBzLW9wZXJhdG9yIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiOWJjNWVhYjQtZjgyMC00MjJjLWFiM2UtYWY1MTg0OTYzYWNjIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6a3ViZWFwcHMtb3BlcmF0b3IifQ.xn__zmd8852plpKQTz7pX1MWWFufK_Y4iYI911xOmTuJQFRJXNUdKcspNs8SAB0pB71NMfT8N_gcnJYcPMUj69IVyO7dlqc8v2EoGg5q4ytUzzuEatviuVz4nLiD7FaXLRmNzH11WOz4oIbRmdli3muslb1UaS2Faly8bgpR6l9c60i_RQSqAYYFAeNIdSKVLz9dgXMNkSOhyp6By3FWXA_EAwmME1JB7Dm7YSk-3o-_xqCTXq6HIBDA047VVMs7ALwOrLT07P8rZzjynlljfgpqVc5Zu_vAY56eBy4mGGizon1RAccwFh0dqFmoTEbydtjOuFsAu7nfPwttx05nnA

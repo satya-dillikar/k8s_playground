@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yages-lb
+  namespace: grpc-demo
+  labels:
+    app: yages
+spec:
+  type: LoadBalancer
+  selector:
+    app: yages
+  ports:
+    - name: grpc-port
+      port: 80
+      protocol: TCP
+      targetPort: 9000
