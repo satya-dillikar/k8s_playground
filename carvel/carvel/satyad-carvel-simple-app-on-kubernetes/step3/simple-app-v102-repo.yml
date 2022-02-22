@@ -1,0 +1,9 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: step3-simple-package-repository
+spec:
+  fetch:
+    imgpkgBundle:
+      image: public.ecr.aws/satyad-pubic-registry/carvel-contents/packages/step3/k8s-simple-app:1.0.0

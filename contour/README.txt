@@ -1,5 +1,9 @@
 https://projectcontour.io/getting-started/
 
+Install contour
+kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
+kubectl get pods -n projectcontour -o wide
+
 
 cd contour
 kind create cluster --config=kind.config.yaml

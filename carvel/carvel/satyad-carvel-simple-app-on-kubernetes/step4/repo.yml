@@ -1,0 +1,12 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: simple-package-repository
+spec:
+  fetch:
+    imgpkgBundle:
+      #image: 192.168.1.211:5000/packages/my-pkg-repo:1.0.0
+      #image: dsatya6/python-docker:1.0.0
+      #image:  192499874028.dkr.ecr.us-west-2.amazonaws.com/k8s-simple-app:1.0.0
+      image: public.ecr.aws/q1w6i7h3/packages/my-pkg-repo:1.0.0

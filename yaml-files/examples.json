@@ -1,0 +1,42 @@
+{
+  "mysqldatabase": {
+    "foo": "localhost",
+    "port": 3012,
+    "credentials": {
+      "username": "root",
+      "password": "root"
+    }
+  },
+  "id": 1,
+  "name": "franc",
+  "salary": 5000,
+  "value": 11,
+  "pivalue": 3.14,
+  "isEnabled": false,
+  "strvalue1": "string value1",
+  "strvalue2": "string value2",
+  "strvalue3": "string value3",
+  "numbers": {
+    "one": null,
+    "two": null,
+    "three": null
+  },
+  "Employee": [
+    {
+      "id": 1,
+      "name": "Franc",
+      "department": {
+        "name": "Sales",
+        "depid": "11"
+      }
+    },
+    {
+      "id": 2,
+      "name": "satya",
+      "department": {
+        "name": "Eng",
+        "depid": "12"
+      }
+    }
+  ]
+}

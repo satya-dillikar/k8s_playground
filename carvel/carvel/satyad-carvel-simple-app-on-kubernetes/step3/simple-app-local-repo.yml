@@ -1,0 +1,10 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: local-simple-package-repository
+spec:
+  fetch:
+    imgpkgBundle:
+      #image: 192.168.1.211:5000/packages/my-pkg-repo:1.0.0
+      image: localhost:5000/packages/my-pkg-repo:1.0.3

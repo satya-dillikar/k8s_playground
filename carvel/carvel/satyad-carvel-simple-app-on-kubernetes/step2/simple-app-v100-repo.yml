@@ -1,0 +1,10 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: simple-package-repository-v100
+spec:
+  fetch:
+    imgpkgBundle:
+      #image: public.ecr.aws/satyad-pubic-registry/carvel-contents/packages/k8s-simple-app:1.0.0
+      image: localhost:5000/packages/k8s-simple-app:1.0.2

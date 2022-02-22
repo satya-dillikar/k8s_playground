@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress-nginx
+  namespace: nginx-sample-traffic
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: contour.vmwaremarketplace.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: apple-service
+            port:
+              number: 5678
+        path: /apple
+        pathType: Prefix
+      - backend:
+          service:
+            name: banana-service
+            port:
+              number: 5678
+        path: /banana
+        pathType: Prefix
