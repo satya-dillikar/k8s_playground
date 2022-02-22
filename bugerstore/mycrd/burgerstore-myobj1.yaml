@@ -1,0 +1,9 @@
+apiVersion: burgerstore.dev/v1alpha1
+kind: BurgerStore
+metadata:
+  name: object1
+spec:
+  owner: "Sam D"
+  address : "London, CA"
+  currency: "Pound"
+  investment: 2000
