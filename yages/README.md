@@ -1,96 +1,120 @@
-# Yet another gRPC echo server
+# YAGES
 
-YAGES (yet another gRPC echo server) is an educational gRPC server implementation. The goal is to learn gRPC and communicate best practices around its deployment and usage in the context of Kubernetes.
+Simple overview of use/purpose.
 
-- [As an Kubernetes app](#as-an-kubernetes-app)
-  - [From inside the cluster](#from-inside-the-cluster)
-  - [From outside the cluster](#from-outside-the-cluster)
-- [As a local app](#as-a-local-app)
-  - [Install](#install)
-  - [Use](#use)
-  - [Develop](#develop)
+## Description
 
-## As an Kubernetes app
+An in-depth paragraph about your project and overview of use.
 
-You can install YAGES as an app in your Kubernetes cluster (tested with Kubernetes v1.9, v1.10, and v1.11) like so:
+## Getting Started
 
-```bash
-$ kubectl apply -f http://mhausenblas.info/yages/app.yaml
+### Dependencies
+
 ```
-
-Then, in order to invoke the service you've got essentially two options: from inside the cluster or from the outside the cluster, by exposing the service.
-
-### From inside the cluster
-
-To access the gRPC server from inside the cluster, you can for example use the [gump](https://quay.io/repository/mhausenblas/gump) container image that has [grpcurl](https://github.com/fullstorydev/grpcurl) installed:
-
-
-```bash
-$ kubectl run -it --rm grpcurl --restart=Never --image=quay.io/mhausenblas/gump:0.1 -- sh 
-If you don't see a command prompt, try pressing enter.
-/go $ grpcurl --plaintext yages:9000 yages.Echo.Ping
-{
-  "text": "pong"
-}
-```
-
-### From outside the cluster
-
-TBD: Using Ingress as shown in [ingress.yaml](ingress.yaml) or an OpenShift Route object with TLS passthrough set.
-
-## As a local app
-
-### Install
-
-Requires Go 1.9 or above, do:
-
-```bash
-$ go get -u github.com/mhausenblas/yages
-```
-
-
-### Use
-
-You can run `go run main.go` in `$GOPATH/src/github.com/mhausenblas/yages` or if you've added `$GOPATH/bin` to your path, directly call the binary:
-
-```bash
-$ yages
-2018/03/25 16:23:42 YAGES in version dev serving on 0.0.0.0:9000 is ready for gRPC clients …
-```
-
-Open up a second terminal session and using [grpcurl](https://github.com/fullstorydev/grpcurl) execute the following:
-
-```bash
-# invoke the ping method:
-$ grpcurl --plaintext localhost:9000 yages.Echo.Ping
-{
-  "text": "pong"
-}
-# invoke the reverse method with parameter:
-$ grpcurl --plaintext -d '{ "text" : "some fun here" }' localhost:9000 yages.Echo.Reverse
-{
-  "text": "ereh nuf emos"
-}
-# invoke the reverse method with parameter from JSON file:
-$ cat echo.json | grpcurl --plaintext -d @ localhost:9000 yages.Echo.Reverse
-{
-  "text": "ohce"
-}
-```
-
-Note that you can execute `grpcurl --plaintext localhost:9000 list` and `grpcurl --plaintext localhost:9000 describe` to get further details on the available services and their respective methods.
-
-### Develop
-
-First you want to generate the stubs based on the protobuf schema. Note that this requires the Go gRPC runtime and plug-in installed on your machine, including `protoc` in v3 set up, see [grpc.io](https://grpc.io/blog/installation) for the steps.
-
-Do the following:
-
-```bash
-$ protoc \
-  --proto_path=$GOPATH/src/github.com/mhausenblas/yages \
-  --go_out=plugins=grpc:yages \
+  protoc --go_out=yages --go_opt=paths=source_relative \
+  --go-grpc_out=yages --go-grpc_opt=paths=source_relative \
   yages-schema.proto
 ```
 
-Executing above command results in the auto-generated file `yages/yages-schema.pb.go`. **Do not** manually edit this file, or put in other words: if you add a new message or service to the schema defined in `yages-schema.proto` just run above `protoc` command again and you'll get an updated version of `yages-schema.pb.go` in the `yages/` directory as a result.
+```
+  protoc --go_out=yages --go_opt=paths=source_relative \
+  yages-schema.proto
+```
+
+```
+  kubectl get services -n grpc-demo
+  NAME       TYPE           CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)          AGE
+  yages      ClusterIP      10.100.136.76   <none>                                                                    9000/TCP         123m
+  yages-lb   LoadBalancer   10.100.18.75    ab35c75dc42d84921873473a40e0e2c9-2078373086.us-west-2.elb.amazonaws.com   9000:31075/TCP   27m
+```
+
+```
+  grpcurl --plaintext ab35c75dc42d84921873473a40e0e2c9-2078373086.us-west-2.elb.amazonaws.com:9000 yages.Echo.Ping
+{
+  "text": "pong"
+}
+```
+
+### Installing
+
+* How/where to download your program
+* Any modifications needed to be made to files/folders
+
+### Executing program
+
+* START SERVER:
+```
+docker run  -p 9000:9000 dsatya6/yages:0.1.0
+```
+
+* CLIENT:
+
+
+```
+LOCAL
+grpcurl --plaintext localhost:9000 list
+
+grpcurl --plaintext localhost:9000 describe
+
+grpcurl --plaintext localhost:9000 Echo.Ping
+
+grpcurl --plaintext -d '{ "text" : "ereh nuf emos" }' localhost:9000 Echo.Reverse
+```
+
+
+```
+ON AWS LoadBalancer
+grpcurl --plaintext a7cbf8ceccaf24a9ea3f8133bc226a10-1100472558.us-west-2.elb.amazonaws.com:80 list
+grpcurl --plaintext a7cbf8ceccaf24a9ea3f8133bc226a10-1100472558.us-west-2.elb.amazonaws.com:80 describe
+grpcurl --plaintext a7cbf8ceccaf24a9ea3f8133bc226a10-1100472558.us-west-2.elb.amazonaws.com:80 Echo.Ping
+grpcurl --plaintext -d '{ "text" : "ereh nuf emos" }' a7cbf8ceccaf24a9ea3f8133bc226a10-1100472558.us-west-2.elb.amazonaws.com:80 Echo.Reverse
+
+** INGRESS grpc
+grpcurl --plaintext a5ff9bc794c9c412798924a990b33791-7c4fb9dc4b1b492e.elb.us-west-2.amazonaws.com:80 list
+```
+
+* Cluster-IP service
+```
+kubectl get services -n grpc-demo
+NAME    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+yages   ClusterIP   10.96.145.131   <none>        80/TCP    18m
+
+ kubectl run -it --rm grpcurl --restart=Never --image=quay.io/mhausenblas/gump:0.1 -- sh
+ /go $  grpcurl --plaintext 10.96.145.131:80 Echo.Ping
+{
+  "text": "pong"
+}
+/go $  grpcurl --plaintext -d '{ "text" : "ereh nuf emos" }' 10.96.145.131:80 Echo.Reverse
+{
+  "text": "some fun here"
+}
+/go $ exit
+```
+
+## Help
+
+Any advise for common problems or issues.
+```
+command to run if program contains helper info
+```
+
+## Authors
+
+Contributors names and contact info
+
+[@SatyaDillikar](https://twitter.com/SatyaDillikar)
+
+## Version History
+
+* 0.2
+    * Various bug fixes and optimizations
+    * See [commit change]() or See [release history]()
+* 0.1
+    * Initial Release
+
+## License
+
+N/A
+
+## Acknowledgments
+* [yages](https://github.com/mhausenblas/yages)

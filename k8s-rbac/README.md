@@ -1,25 +1,50 @@
-https://docs.bitnami.com/tutorials/configure-rbac-in-your-kubernetes-cluster/
+# kubernetes role based access (RBAC)
 
+Simple overview of use/purpose.
+
+## Description
+
+An in-depth paragraph about your project and overview of use.
+
+## Getting Started
+
+### Dependencies
+
+```
 minikube start -p minikube
+```
 
+```
 kubectl create namespace office
+```
 
------CREATE RSA PRIVATE KEY-----
+### Installing
+
+* How/where to download your program
+* Any modifications needed to be made to files/folders
+
+### Executing program
+
+* -----CREATE RSA PRIVATE KEY-----
+```
 cd /Users/sdillikar/myprojects/golang-projects/k8s-rbac
 openssl genrsa -out employee.key 2048
 > created employee.key
+```
 
-
------CREATE CERTIFICATE REQUEST-----
+* -----CREATE CERTIFICATE REQUEST-----
+```
 openssl req -new -key employee.key -out employee.csr -subj "/CN=employee/O=bitnami"
 > created employee.csr
+```
 
------CREATE CERTIFICATE-----
+* -----CREATE CERTIFICATE-----
+```
 openssl x509 -req -in employee.csr -CA /Users/sdillikar/.minikube/ca.crt -CAkey /Users/sdillikar/.minikube/ca.key -CAcreateserial -out employee.crt -days 500
 >created employee.crt
+```
 
-
-
+```
 kubectl config set-credentials employee --client-certificate=/Users/sdillikar/myprojects/golang-projects/k8s-rbac/employee.crt  --client-key=/Users/sdillikar/myprojects/golang-projects/k8s-rbac/employee.key
 
 kubectl config view
@@ -44,10 +69,11 @@ kubectl --context=employee-context get pods
 kubectl --context=employee-context get pods --namespace=default
 Error from server (Forbidden): pods is forbidden: User "employee" cannot list resource "pods" in API group "" in the namespace "default"
 
-----------------------------------------------------------------
+```
 
-https://theithollow.com/2019/05/20/kubernetes-role-based-access/
+* follow kubernetes-role-based-access link below
 
+```
 kubectl create namespace hollowteam
 
 kubectl apply -f service-account.yaml
@@ -68,7 +94,9 @@ kubectl describe sa hollowteam-user -n hollowteam
 #kubectl get secret [user token] -n [namespace] -o "jsonpath={.data.token}" | base64 -D
 kubectl get secret hollowteam-user-token-pbfml -n hollowteam -o "jsonpath={.data.token}" | base64 -D
 
->>>
+```
+
+```
 
 kubectl describe sa hollowteam-user -n hollowteam
 Name:                hollowteam-user
@@ -90,10 +118,41 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6Ijc2b3MyVnVoX1Z6WVpzTTB1SFZHb003TGNTUDA0MHJib04yQkZP
 
 LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCakNDQWU2Z0F3SUJBZ0lCQVRBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwdGFXNXAKYTNWaVpVTkJNQjRYRFRJeE1ETXdOVEF4TVRZeE9Gb1hEVE14TURNd05EQXhNVFl4T0Zvd0ZURVRNQkVHQTFVRQpBeE1LYldsdWFXdDFZbVZEUVRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTW9DCkRaZ0k2T2x2S2Z4TzA4ajFrbUQ3b0xTYzYwVEl2NCs3ckw4b0l0LzIrblQ4YjFJL051eG1KRU9QUFlVeVM3VVEKaU9lL0tXZDJOQzV2dE1XY2lmaUhMdm9EUUFxNTBHdC9zUVI1bzdYN2ZiZmNmdmpESHA2SEpkcHNHdGJXalRMRwpCZU5BVlhsTWdjTmJoQXZkRHk4N1lmbVhoTkxxSUpkVnA2c2JLRTJUZ0t2WnlRbmlmajZTQ1VxbitIaThvU1pmCk5QY2lCQm42Wnc5WS93M0xOcU5CbkE4dXlFcnZVajJ0dmZKc2pnYXZHZ3gwejNYSVcwQkFzbWlPdGlhRXVpY2oKa2pncmpmelFWTWRDQ1RQNU80TXN6OGIyMk94SEJqQ25HVk55dnExd0J0dUg2dUJOdGRtL0c5NGg5bTNQRlh6YgozNStwRHBYMVE1QjdQU0lhMkw4Q0F3RUFBYU5oTUY4d0RnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXCk1CUUdDQ3NHQVFVRkJ3TUNCZ2dyQmdFRkJRY0RBVEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVcKQkJSb0taendDL21DQUJBeFZRcEsrUWhZZHdsdGtEQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUF3V0VRdlc4WQpoMmd3eW5saVJ2NENuc0E2Z2R6OEpVdnBtWlFYaFIyaktkN3RzVkZPazFoSFpBMkJORG82SHlFZ1FxdFZwTGtRClVvSS9TRUR1QUVSZnhGcnZIdU9LTm1xNGUrcVEzdXZCMjVlMGU3SUJFSGpocTZiUE5uVzhJUEJBczczTjVERjkKVkJGN29sK2lnWElmUmJLYU54SERNbkJJLytQM3FRV0ticEZLWGdrdHZ5eThLcVozSW96Uk0rNlhjYlhtWWxJTwpOZ240NjlFUG55anN2ajRRakxPOG1La2JKNTBST2NHc3duTnovUlVaNHozRlAzSWZzOC9ZV1Z5WTl5QUtaeE82ClpVK0RpSHBya2Zkd1VuUGViUEhtUTVnbnBzMFhuTGUvNEFMMWljaDlvZEdnc3pVMW1WektzTHh6T2o3SmZMQWoKNkpmOFNPSXY0Ylc1Z1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
 
-<<<
+```
 
+```
 kubectl get secret [user token] -n [namespace] -o "jsonpath={.data['ca\.crt']}"
 
 kubectl get secret hollowteam-user-token-pbfml -n hollowteam -o "jsonpath={.data['ca\.crt']}"
+```
 
-copy base64 user-token and certificate to KUBECONFIG file.
+* copy base64 user-token and certificate to KUBECONFIG file.
+
+## Help
+
+Any advise for common problems or issues.
+```
+command to run if program contains helper info
+```
+
+## Authors
+
+Contributors names and contact info
+
+[@SatyaDillikar](https://twitter.com/SatyaDillikar)
+
+## Version History
+
+* 0.2
+    * Various bug fixes and optimizations
+    * See [commit change]() or See [release history]()
+* 0.1
+    * Initial Release
+
+## License
+
+N/A
+
+## Acknowledgments
+* [configure-rbac-in-your-kubernetes-cluster](https://docs.bitnami.com/tutorials/configure-rbac-in-your-kubernetes-cluster/)
+* [kubernetes-role-based-access](https://theithollow.com/2019/05/20/kubernetes-role-based-access/)
