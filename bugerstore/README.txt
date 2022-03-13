@@ -54,3 +54,13 @@ generate CRDs:
 
  see folders config and maninfest
  
+vi kind-config-with-ip.yaml
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  apiServerAddress: "192.168.1.211"
+
+
+kind create cluster --name local-ip-cl1 --config kind-config-with-ip.yaml
+kind export kubeconfig  --name=local-ip-cl1  --kubeconfig=./kubeconfig-kind-local-ip-cl1.yaml

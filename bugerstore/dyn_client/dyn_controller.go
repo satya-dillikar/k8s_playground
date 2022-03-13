@@ -2,7 +2,6 @@ package dyn_client
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -42,14 +41,14 @@ func newController(client dynamic.Interface, dynInformer dynamicinformer.Dynamic
 }
 
 func handleAdd(obj interface{}) {
-	log.Println("handleAdd was called")
+	fmt.Println("handleAdd was called")
 }
 func handleDelete(obj interface{}) {
-	log.Println("handleDelete was called")
+	fmt.Println("handleDelete was called")
 }
 
 func handleUpdate(oldObj interface{}, newObj interface{}) {
-	log.Println("handleUpdate was called")
+	fmt.Println("handleUpdate was called")
 }
 
 func (c *contrller) run(ch <-chan struct{}) {

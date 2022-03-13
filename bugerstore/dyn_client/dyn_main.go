@@ -55,7 +55,7 @@ func DynamicMain(mykubeconfig string, namespace string) {
 	if err != nil {
 		fmt.Printf("error %s, converting unstructured to kluster type", err.Error())
 	}
-	fmt.Printf("the concrete type that we got is %+v\n", brgs)
+	// fmt.Printf("the concrete type that we got is %+v\n", brgs)
 
 	// encode back to JSON
 	enc := json.NewEncoder(os.Stdout)
