@@ -10,14 +10,15 @@ build :
 	go build -o bin/burgerstore .
 
 run :
-	./bin/burgerstore &
+	./bin/burgerstore /Users/sdillikar/kubeconfig-kind-local-ip-cl1.yaml mydev-ns
 
 clean :
-	kubectl delete -f mycrd >>/dev/null
-	kubectl delete -f manifests >>/dev/null
+	# kubectl delete -f mycrd >>/dev/null
+	# kubectl delete -f manifests >>/dev/null
+	rm -rf bin/*
 
 test:
-	go test -v ./...
+	# go test -v ./...
 
 build-container :
 	@docker build -t dsatya6/$(NAME):$(VERSION) .
@@ -35,5 +36,4 @@ test-container :
 	@sleep 2
 	@docker stop $(NAME) || true
 	@docker rm -f $(NAME) || true
-
 
